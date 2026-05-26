@@ -1,0 +1,292 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3rd Position SMP</title>
+    <style>
+        /* CSS Core Layout Reset */
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #0f1115;
+            color: #e2e8f0;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        /* 👑 THE REQUIRED CSS TO FORCE BACKGROUND RENDERING */
+        .anwriter-bg-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -10;          /* CSS forces image behind text panels */
+            object-fit: cover;     /* CSS forces image to stretch without stretching out of proportion */
+            pointer-events: none;  /* CSS prevents the image from blocking clicks on buttons */
+        }
+
+        /* CSS Dark Tint Overlay Screen */
+        .bg-tint {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(15, 17, 21, 0.85);
+            z-index: -5;           /* CSS sits overlay directly above image but under content */
+        }
+
+        /* CSS Navigation Tab Bar */
+        .tab-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: #171c26;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: center;
+            z-index: 100;
+        }
+
+        .tab-link {
+            color: #94a3b8;
+            text-decoration: none;
+            padding: 15px 20px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab-link:hover {
+            color: #3b82f6;
+        }
+
+        /* Content Layering */
+        .container {
+            max-width: 650px;
+            margin: 0 auto;
+            padding: 80px 20px 40px 20px;
+            position: relative;
+            z-index: 5;
+        }
+
+        .welcome-section {
+            height: 75vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .welcome-section h1 {
+            font-size: 2.5rem;
+            color: #3b82f6;
+            margin: 0 0 15px 0;
+            text-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+        }
+
+        .content-section {
+            padding: 40px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            color: #10b981;
+        }
+
+        p.about-text {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: #e2e8f0;
+            background: rgba(20, 24, 33, 0.75);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            margin-bottom: 25px;
+        }
+
+        /* 📦 RESOURCE PACKS SECTION DISPLAY */
+        .packs-box {
+            background: rgba(23, 28, 38, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 40px;
+        }
+
+        .platform-title {
+            color: #e2e8f0;
+            border-bottom: 1px solid #2d3748;
+            padding-bottom: 5px;
+            margin: 20px 0 10px 0;
+            font-size: 1.3rem;
+        }
+
+        .pack-item {
+            background: #1a202c;
+            border: 1px solid #2d3748;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .pack-info h3 {
+            margin: 0 0 5px 0;
+            color: #3b82f6;
+            font-size: 1.2rem;
+        }
+
+        .pack-info p {
+            margin: 0;
+            color: #94a3b8;
+            font-size: 0.95rem;
+        }
+
+        .dl-btn {
+            background: #10b981;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: bold;
+            text-align: center;
+            font-size: 0.9rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            transition: background 0.2s;
+        }
+
+        .dl-btn:hover {
+            background: #059669;
+        }
+
+        .soon-btn {
+            background: #4a5568;
+            color: #a0aec0;
+            text-decoration: none;
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: bold;
+            text-align: center;
+            font-size: 0.9rem;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        /* Socials Layout Box */
+        .socials-box {
+            background: rgba(23, 28, 38, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 25px;
+        }
+
+        .social-links {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .social-btn {
+            background: #222938;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .discord   { border-left: 4px solid #5865F2; }
+        .instagram { border-left: 4px solid #E1306C; }
+        .tiktok    { border-left: 4px solid #000000; }
+        .youtube   { border-left: 4px solid #FF0000; }
+    </style>
+</head>
+<body>
+
+    <img src="3tpsmp.jpg" alt="Background" class="anwriter-bg-layer">
+    <div class="bg-tint"></div>
+
+    <nav class="tab-bar">
+        <a href="#welcome" class="tab-link">Home</a>
+        <a href="#about" class="tab-link">About</a>
+        <a href="#packs" class="tab-link">Packs</a>
+        <a href="#socials" class="tab-link">Socials</a>
+    </nav>
+
+    <div class="container">
+        <div id="welcome" class="welcome-section">
+            <h1>Welcome to 3rd Position SMP!</h1>
+            <p>We glad you came here</p>
+        </div>
+
+        <div id="about" class="content-section">
+            <h2>What is 3rd Position SMP?</h2>
+            <p class="about-text">
+                3rd Position SMP (better known as 3TP SMP in short) is a normal survival multiplayer server with 3rd positionist influences. While keeping the core experience rooted in vanilla Minecraft survival, our community incorporates structural elements of factional coordination, unique group governance models, and distinct ideological themes. It is a world where regular base-building meets political theory, allowing groups to establish organized territories while enjoying standard cooperative gameplay.
+            </p>
+        </div>
+
+        <div id="packs" class="content-section">
+            <div class="packs-box">
+                <h2>Our Resource Packs</h2>
+                <p style="color: #cbd5e1; margin: 0;">Download our official server assets to see custom textures, flags, and server-exclusive items correctly:</p>
+                
+                <h3 class="platform-title">For Bedrock Edition:</h3>
+
+                <div class="pack-item">
+                    <div class="pack-info">
+                        <h3>Falangecraft</h3>
+                        <p>Official asset theme pack for Falange textures and structural designs.</p>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1DbBWlHXmcXlmYEsP361RRMLFBmQoEP-a/view?usp=drivesdk" target="_blank" class="dl-btn">Download from Drive</a>
+                </div>
+
+                <div class="pack-item">
+                    <div class="pack-info">
+                        <h3>CKP Pack</h3>
+                        <p>Official Christliche Korporatische Partei custom faction content pack.</p>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1uShQ0FKJFqga52SHhFFmQkvkk-NpdRBZ/view?usp=drivesdk" target="_blank" class="dl-btn">Download from Drive</a>
+                </div>
+
+                <h3 class="platform-title">For Java Edition:</h3>
+                <div class="pack-item">
+                    <div class="pack-info">
+                        <h3>Java Compatibility Pack</h3>
+                        <p>Server pack updates for Java clients are currently in progress.</p>
+                    </div>
+                    <a href="#" class="soon-btn">Soon</a>
+                </div>
+            </div>
+        </div>
+
+        <div id="socials" class="content-section">
+            <div class="socials-box">
+                <h2>Our Socials</h2>
+                <div class="social-links">
+                    <a href="https://discord.gg/WK6CZ3gzx" target="_blank" class="social-btn discord">Join our Discord</a>
+                    <a href="https://www.instagram.com/3rdpositionsmpofficial?igsh=YXZtcjgzMnVyd29h" target="_blank" class="social-btn instagram">Follow our Instagram</a>
+                    <a href="https://www.tiktok.com/@3rdposition_smp?_r=1&_t=ZS-96fYvelSAAm" target="_blank" class="social-btn tiktok">Follow our TikTok</a>
+                    <a href="https://youtube.com/@3rdpositionsmpofficial?si=czzIuW2P6uPAmoEi" target="_blank" class="social-btn youtube">Subscribe on YouTube</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
